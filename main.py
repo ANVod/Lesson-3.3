@@ -8,19 +8,24 @@ SCREEN_HEIGHT = 600
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Игра Тир")
 
+# Предположим, что пути к изображениям корректны
 icon = pygame.image.load("img/icon.jpg")
 pygame.display.set_icon(icon)
 
-target_image = pygame.image.load("img/icon.jpg")
+target_image = pygame.image.load("img/target.png")
 target_width = 80
 target_height = 80
-target_image = pygame.image.load("img/target.png")
 
 target_x = random.randint(0, SCREEN_WIDTH - target_width)
 target_y = random.randint(0, SCREEN_HEIGHT - target_height)
 
-color = (random.randint(0,255), random.randint(0,255), random.randint(0,255))
+color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
 
+# Переменная для подсчета счета
+score = 0
+
+# Скорость движения цели
+target_speed = 5
 
 running = True
 while running:
@@ -33,7 +38,20 @@ while running:
             if target_x < mouse_x < target_x + target_width and target_y < mouse_y < target_y + target_height:
                 target_x = random.randint(0, SCREEN_WIDTH - target_width)
                 target_y = random.randint(0, SCREEN_HEIGHT - target_height)
+                score += 1  # Увеличиваем счет
+
+    # Здесь мы двигаем цель
+    target_x += target_speed
+    if target_x > SCREEN_WIDTH:  # Если цель вышла за экран, то начинаем с начала
+        target_x = 0 - target_width
+
     screen.blit(target_image, (target_x, target_y))
+
+    # Отображаем счет
+    font = pygame.font.Font(None, 36)
+    score_text = font.render('Счет: ' + str(score), 1, (10, 10, 10))
+    screen.blit(score_text, (10, 10))
+
     pygame.display.update()
 
 pygame.quit()
